@@ -14,6 +14,7 @@ fetch(url)
     let dessertsData = [];
     let drinksData = [];
     let carrito = [];
+    let orderItems = [];
 
     let menuItems = document.getElementById("menu-items");
 
@@ -119,7 +120,8 @@ fetch(url)
       });
 
     function showOrderDetail() {
-      let orderItems = getOrderItems();
+      let totalValue = 0;
+      orderItems = getOrderItems();
       let div = document.createElement("div");
       let table = document.createElement("table");
       table.className = "table table-striped";
@@ -140,12 +142,65 @@ fetch(url)
           <td>${orderItems[i].description}</td>
           <td>${orderItems[i].unitPrice}</td>
           <td>${orderItems[i].amount}</td>`;
+        totalValue += orderItems[i].amount;
         tableBody.appendChild(row);
       }
 
       table.appendChild(tableBody);
+
+      let divConfirmation = document.createElement("div");
+      divConfirmation.className = "container-fluid order-group";
+      let total = document.createElement("p");
+      total.className = "d-flex justify-content-start font-weight-bold";
+      total.textContent = "Total: $" + totalValue;
+      let buttons = document.createElement("span");
+      buttons.className = "d-flex justify-content-end";
+      buttons.innerHTML = `<button type="button" class="btn btn-danger cancel-btn" data-toggle="modal" data-target="#exampleModal">Cancel</button>
+      
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cancel the order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+        Are you sure about cancelling the order?
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn confirm-btn"  id="cancel-order" data-dismiss="modal">Yes, I want to cancel the order</button>
+        <br/>
+        <button type="button" class="btn btn-danger cancel-btn " data-dismiss="modal" >No, I want to continue adding products</button>
+            </div>
+            </div>
+            </div>
+        </div>
+
+      <button type="button" class="btn  confirm-btn  ml-2 mr-4" id="confirm-order">Confirm Order</button>`;
+
+      divConfirmation.appendChild(total);
+      divConfirmation.appendChild(buttons);
       div.appendChild(table);
+      div.appendChild(divConfirmation);
       menuItems.appendChild(div);
+
+      document
+        .getElementById("cancel-order")
+        .addEventListener("click", (event) => {
+          carrito = [];
+          orderItems = [];
+          menuItems.innerHTML = "";
+          changeCartQuantity();
+          showOrderDetail();
+        });
+
+      document
+        .getElementById("confirm-order")
+        .addEventListener("click", (event) => {
+          console.log(orderItems);
+        });
     }
 
     function getOrderItems() {
@@ -178,7 +233,6 @@ fetch(url)
           }
         }
       }
-      console.log(orderItems);
       return orderItems;
     }
   });

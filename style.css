@@ -34,3 +34,19 @@
   width: 300px;
   height: 250px;
 }
+
+.order-group {
+  margin-right: 20px;
+  padding-right: 20px;
+}
+
+.cancel-btn {
+  color: black;
+  border-color: rgb(40, 98, 104);
+}
+
+.confirm-btn {
+  background-color: rgba(246, 212, 217, 0.986);
+  color: black;
+  border-color: black;
+}
