@@ -1,10 +1,19 @@
 @font-face {
   font-family: logoFont;
-  src: url(Satisfy-Regular.ttf);
+  src: url(./assets/Satisfy-Regular.ttf);
 }
 
 header {
   font-family: logoFont;
+}
+
+.container-fluid {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  color: black;
 }
 
 #cart-img {
@@ -15,6 +24,9 @@ header {
 #banner-img {
   max-width: 1600px;
   max-height: 318px;
-  width: 1400px;
-  height: 318px;
+}
+
+.card-image {
+  width: 300px;
+  height: 250px;
 }
