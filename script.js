@@ -13,6 +13,7 @@ fetch(url)
     let saladsData = [];
     let dessertsData = [];
     let drinksData = [];
+    let carrito = [];
 
     let menuItems = document.getElementById("menu-items");
 
@@ -31,30 +32,32 @@ fetch(url)
       }
     }
 
+    createMenuItems(burgersData.products);
+
     document.getElementById("burgers").addEventListener("click", (event) => {
-      document.getElementById("menu-items").innerHTML = "";
+      menuItems.innerHTML = "";
       document.getElementById("item-title").textContent = burgersData.name;
       createMenuItems(burgersData.products);
     });
 
     document.getElementById("tacos").addEventListener("click", (event) => {
-      document.getElementById("menu-items").innerHTML = "";
+      menuItems.innerHTML = "";
       document.getElementById("item-title").textContent = tacosData.name;
       createMenuItems(tacosData.products);
     });
 
     document.getElementById("salads").addEventListener("click", (event) => {
-      document.getElementById("menu-items").innerHTML = "";
+      menuItems.innerHTML = "";
       document.getElementById("item-title").textContent = saladsData.name;
       createMenuItems(saladsData.products);
     });
     document.getElementById("desserts").addEventListener("click", (event) => {
-      document.getElementById("menu-items").innerHTML = "";
+      menuItems.innerHTML = "";
       document.getElementById("item-title").textContent = dessertsData.name;
       createMenuItems(dessertsData.products);
     });
     document.getElementById("drinks").addEventListener("click", (event) => {
-      document.getElementById("menu-items").innerHTML = "";
+      menuItems.innerHTML = "";
       document.getElementById("item-title").textContent = drinksData.name;
       createMenuItems(drinksData.products);
     });
@@ -73,13 +76,109 @@ fetch(url)
         <div class="card-body">
           <h5 class="card-title">${products[i].name}</h5>
           <p class="card-text">${products[i].description}</p>
-          <a href="#" class="btn btn-dark">Add to cart</a>
+          <p class="card-text"><b>$${products[i].price}</b></p>
         </div>`;
 
+        let btn = document.createElement("a");
+        btn.innerHTML = `<a class="btn btn-dark ml-4 mb-4">Add to cart</a>`;
+        div2.appendChild(btn);
         div1.appendChild(div2);
         div.appendChild(div1);
 
-        document.getElementById("menu-items").appendChild(div);
+        menuItems.appendChild(div);
+
+        btn.addEventListener("click", (event) => {
+          addToCart(products[i]);
+        });
       }
+    }
+
+    function addToCart(product) {
+      carrito.push(product);
+      changeCartQuantity();
+    }
+
+    function changeCartQuantity() {
+      let quantity = document.getElementById("cart-quantity");
+
+      if (carrito.length === 0) {
+        quantity.textContent = "";
+      } else if (carrito.length === 1) {
+        quantity.textContent = carrito.length + " item";
+      } else {
+        quantity.textContent = carrito.length + " items";
+      }
+    }
+
+    document
+      .getElementById("cart-notification")
+      .addEventListener("click", (event) => {
+        menuItems.innerHTML = "";
+        document.getElementById("item-title").textContent = "Order Detail";
+        showOrderDetail();
+      });
+
+    function showOrderDetail() {
+      let orderItems = getOrderItems();
+      let div = document.createElement("div");
+      let table = document.createElement("table");
+      table.className = "table table-striped";
+      table.innerHTML = `<thead>
+        <tr>
+          <th scope="col">Item</th>
+          <th scope="col">Qty.</th>
+          <th scope="col">Description</th>
+          <th scope="col">Unit Price</th>
+          <th scope="col">Amount</th>
+        </tr>
+      </thead>`;
+      let tableBody = document.createElement("tbody");
+      for (let i = 0; i < orderItems.length; i++) {
+        let row = document.createElement("tr");
+        row.innerHTML = `<th scope="row">${orderItems[i].item}</th>
+          <td>${orderItems[i].quantity}</td>
+          <td>${orderItems[i].description}</td>
+          <td>${orderItems[i].unitPrice}</td>
+          <td>${orderItems[i].amount}</td>`;
+        tableBody.appendChild(row);
+      }
+
+      table.appendChild(tableBody);
+      div.appendChild(table);
+      menuItems.appendChild(div);
+    }
+
+    function getOrderItems() {
+      let added = []; //Tipo producto
+      let orderItems = []; //Tipo product 2.0
+      let product = null;
+      let num = 0;
+      for (let i = 0; i < carrito.length; i++) {
+        if (!added.includes(carrito[i])) {
+          num++;
+          let qty = 1;
+          let uPrice = carrito[i].price;
+          product = {
+            item: num,
+            quantity: qty,
+            description: carrito[i].name,
+            unitPrice: uPrice,
+            amount: qty * uPrice,
+          };
+          added.push(carrito[i]);
+          orderItems.push(product);
+        } else {
+          for (let j = 0; j < orderItems.length; j++) {
+            if (orderItems[j].description === carrito[i].name) {
+              orderItems[j].quantity += 1;
+              orderItems[j].amount =
+                orderItems[j].quantity * orderItems[j].unitPrice;
+              break;
+            }
+          }
+        }
+      }
+      console.log(orderItems);
+      return orderItems;
     }
   });

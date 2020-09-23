@@ -20,12 +20,15 @@
         <nav class="navbar navbar-expand-lg navbar-light">
           <div class="container-fluid">
             <a class="navbar-brand" href="#"> <h1>Restaurant & Lounge</h1></a>
-            <img
-              src="assets/carrito.png"
-              alt="Carrito"
-              id="cart-img"
-              class="img-fluid"
-            />
+            <div id="cart-notification">
+              <img
+                src="assets/carrito.png"
+                alt="Carrito"
+                id="cart-img"
+                class="img-fluid"
+              />
+              <span id="cart-quantity"></span>
+            </div>
           </div>
         </nav>
       </div>
@@ -96,7 +99,8 @@
       </section>
     </main>
     <footer>
-      <div class="container-fluid">
+      <div class="container-fluid mt-4">
+        <br />
         <p class="text-center">
           Contact us: +57 3102105253 - info@restaurant.com - @restaurant
         </p>

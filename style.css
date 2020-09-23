@@ -3,7 +3,7 @@
   src: url(./assets/Satisfy-Regular.ttf);
 }
 
-header {
+.navbar-brand {
   font-family: logoFont;
 }
 
@@ -19,6 +19,10 @@ header {
 #cart-img {
   width: 50px;
   height: 50px;
+}
+
+#cart-notification {
+  cursor: pointer;
 }
 
 #banner-img {
